@@ -1,1 +1,0 @@
-# seiyo-bijutsu
