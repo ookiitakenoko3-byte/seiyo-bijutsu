@@ -1,0 +1,10 @@
+{
+  "name": "西洋美術史を旅する",
+  "short_name": "西洋美術史",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7f5fb",
+  "theme_color": "#26234a",
+  "lang": "ja",
+  "description": "時代・作品・思想をつなげて学ぶ西洋美術史アプリ"
+}

@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#26234a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="西洋美術史">
+<link rel="manifest" href="manifest.json">
+<title>西洋美術史を旅する</title>
+<style>
+:root{--ink:#24213b;--muted:#77758b;--accent:#5c4bc0;--paper:#f7f5fb;--card:#fff;--line:#e8e4f1;--gold:#d9a441}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Yu Gothic",sans-serif;line-height:1.55}
+header{padding:calc(env(safe-area-inset-top) + 22px) 20px 22px;background:linear-gradient(135deg,#26234a,#5c4bc0 62%,#b66d89);color:white;border-radius:0 0 26px 26px}
+.eyebrow{font-size:11px;letter-spacing:2px;font-weight:800;opacity:.8}.heroTitle{font-family:Georgia,serif;font-size:30px;line-height:1.2;margin:8px 0}.sub{opacity:.85;font-size:13px}
+main{padding:16px 15px 100px;max-width:760px;margin:auto}.panel{background:var(--card);border:1px solid var(--line);border-radius:19px;padding:16px;margin:12px 0;box-shadow:0 4px 18px #34236c0a}
+h2{font-size:19px;margin:4px 0 10px}h3{font-size:16px;margin:0 0 7px}.muted{color:var(--muted);font-size:13px}.progress{height:8px;background:#ece9f5;border-radius:99px;overflow:hidden;margin:10px 0}.progress>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#cf83a4);width:0}
+nav{position:fixed;z-index:5;bottom:0;left:0;right:0;padding:8px 8px calc(env(safe-area-inset-bottom) + 7px);display:flex;gap:5px;background:#ffffffed;backdrop-filter:blur(16px);border-top:1px solid var(--line)}
+nav button{flex:1;background:transparent;border:0;color:var(--muted);padding:9px 3px;font-size:12px;border-radius:12px}nav button.active{background:#efecfb;color:var(--accent);font-weight:800}
+button,.btn{cursor:pointer}button.primary{background:var(--accent);color:#fff;border:0;border-radius:13px;padding:12px 15px;font-weight:700;width:100%;font-size:14px}
+button.secondary{background:#f0edfa;color:var(--accent);border:1px solid #e3ddf5;border-radius:12px;padding:10px 12px;font-weight:700}
+.period{display:flex;align-items:flex-start;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.period:last-child{border-bottom:0}.periodIcon{flex:0 0 44px;height:44px;border-radius:14px;background:linear-gradient(145deg,#ded8fa,#f6e3e8);display:grid;place-items:center;font-size:20px}.period button{all:unset;cursor:pointer;display:block;flex:1}.period .name{font-weight:800}.period .dates{font-size:11px;color:var(--accent);font-weight:700}.period .desc{font-size:12px;color:var(--muted);margin-top:3px}
+.tag{display:inline-block;background:#f0edfa;color:#5143a0;border-radius:99px;padding:4px 9px;font-size:11px;font-weight:700;margin:2px 4px 2px 0}
+.section{margin:17px 0}.section h3{display:flex;gap:8px;align-items:center}.section p{margin:6px 0;font-size:14px}.bullet{padding-left:20px;margin:8px 0}.bullet li{padding:3px 0;font-size:14px}
+.quizChoice{display:block;width:100%;text-align:left;border:1px solid var(--line);background:#fff;padding:13px;border-radius:13px;margin:8px 0;color:var(--ink);font-size:14px}.quizChoice.chosen{border-color:var(--accent);background:#f0edfc}.quizChoice.correct{border-color:#4b9b70;background:#eaf7ef}.quizChoice.wrong{border-color:#d46b70;background:#fff0f0}
+.artbox{background:linear-gradient(145deg,#f1eafa,#fbe9e4);border-radius:16px;padding:18px;min-height:125px;display:flex;align-items:center;justify-content:center;text-align:center;font-family:Georgia,serif;font-size:19px;color:#49406d}
+.smallbtn{border:1px solid var(--line);background:white;border-radius:10px;padding:8px 10px;color:var(--accent);font-weight:700}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:18px}
+@media(min-width:600px){header{padding-left:max(24px,calc((100vw - 720px)/2));padding-right:max(24px,calc((100vw - 720px)/2))}main{padding-top:24px}.heroTitle{font-size:38px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="eyebrow">ART HISTORY • STUDY JOURNEY</div>
+ <div class="heroTitle">西洋美術史を、<br>作品から旅しよう。</div>
+ <div class="sub">時代・作品・思想をつなげて学ぶ</div>
+</header>
+<main id="app"></main>
+<nav>
+ <button class="active" data-tab="home">⌂<br>ホーム</button>
+ <button data-tab="timeline">◷<br>時代</button>
+ <button data-tab="quiz">✓<br>クイズ</button>
+ <button data-tab="guide">✧<br>学び方</button>
+</nav>
+<script>
+const periods=[
+{id:"ancient",icon:"🏛️",title:"古代ギリシャ・ローマ",dates:"紀元前8世紀頃〜西暦5世紀頃",summary:"人体の理想美、比例、建築秩序が西洋美術の重要な基盤に。",context:"ポリス、市民生活、神話、公共空間が芸術を支えました。ローマではギリシャ美術の受容とともに、肖像や記念建築も発展しました。",features:["人体の比例と均衡への関心","神々や英雄を主題とする彫刻","神殿建築の秩序と柱式","ローマでは写実的な肖像表現や公共建築"],artists:["ミュロン","ポリュクレイトス","プラクシテレス"],works:["《円盤投げ》— ミュロンに帰属","パルテノン神殿","《ラオコーン群像》— 作者・年代には議論あり"],compare:"中世のキリスト教美術では、古代の理想的な身体表現より宗教的意味や象徴性が前面に出ることが多くなります。"},
+{id:"medieval",icon:"⛪",title:"中世美術",dates:"5〜14世紀頃",summary:"キリスト教信仰と典礼を中心に、建築・壁画・モザイク・写本装飾が発展。",context:"教会や修道院が制作と鑑賞の主要な場となり、作品は信仰を伝える役割を担いました。地域や世紀によって表現は大きく異なります。",features:["聖書物語や聖人を主題とする","金地や象徴的な色彩","ロマネスクの厚い壁・半円アーチ","ゴシックの尖頭アーチ・高い窓・ステンドグラス"],artists:["チマブーエ","ジョット"],works:["シャルトル大聖堂のステンドグラス","サン・ドニ大聖堂","ジョット《スクロヴェーニ礼拝堂壁画》"],compare:"ジョットの人物表現には量感や感情、空間表現の変化が見られ、後のルネサンスにつながる動きとして語られます。"},
+{id:"renaissance",icon:"🎨",title:"ルネサンス",dates:"14〜16世紀",summary:"古代文化への関心、人間への注目、遠近法や自然観察が絵画・彫刻を変えた。",context:"イタリアの都市、商人や教会などの注文主、人文主義、古代遺物への関心が発展を支えました。北方ヨーロッパでは油彩技法など独自の展開も見られます。",features:["線遠近法による空間構成","人体の量感と自然観察","古代神話とキリスト教主題の共存","北方では細密描写や油彩の発展"],artists:["レオナルド・ダ・ヴィンチ","ミケランジェロ","ラファエロ","ボッティチェリ","ヤン・ファン・エイク"],works:["レオナルド《最後の晩餐》","ミケランジェロ《ダヴィデ》","ラファエロ《アテナイの学堂》","ボッティチェリ《ヴィーナスの誕生》"],compare:"バロックはルネサンスの均衡や明晰さを受け継ぎながら、動勢、劇的な光、感情への訴えを強める傾向があります。"},
+{id:"baroque",icon:"🕯️",title:"バロック",dates:"17世紀を中心に",summary:"動き、劇的な明暗、強い感情、鑑賞者を巻き込む空間表現。",context:"カトリック改革、王権や宮廷の文化、都市の繁栄など、地域ごとに異なる背景のもとで発展しました。オランダでは市民や市場向けの絵画も盛んでした。",features:["明暗の強い対比","斜線構図や動きのあるポーズ","演劇的・感情的な場面","宗教画、肖像、風俗画、静物画など地域ごとに多様"],artists:["カラヴァッジョ","ベルニーニ","ルーベンス","レンブラント","フェルメール"],works:["カラヴァッジョ《聖マタイの召命》","ベルニーニ《聖テレジアの法悦》","フェルメール《牛乳を注ぐ女》"],compare:"新古典主義は古代を規範とした明晰な構成や道徳的主題を重視し、バロックやロココの装飾性への反動とも結びつきました。"},
+{id:"neoclassicism",icon:"⚖️",title:"新古典主義・ロマン主義",dates:"18世紀後半〜19世紀前半",summary:"古代の規範・理性と、感情・自然・崇高への関心が対照的に展開。",context:"啓蒙思想、考古学的発見、フランス革命やナポレオン時代、近代的な個人意識の高まりが関係しました。",features:["新古典主義：明晰な輪郭、秩序、古代の主題","ロマン主義：劇的な感情、自然、歴史や異国への関心","芸術家の個性や想像力への注目"],artists:["ジャック＝ルイ・ダヴィッド","アングル","ドラクロワ","カスパー・ダーヴィト・フリードリヒ"],works:["ダヴィッド《ホラティウス兄弟の誓い》","ドラクロワ《民衆を導く自由の女神》","フリードリヒ《雲海の上の旅人》"],compare:"19世紀半ば以降、写実主義や印象派は理想化された歴史画から、同時代の社会や目に映る光景へ関心を移していきます。"},
+{id:"impressionism",icon:"🌅",title:"写実主義・印象派・ポスト印象派",dates:"19世紀中頃〜20世紀初頭",summary:"同時代の生活、屋外の光、視覚体験、色彩や筆触そのものへの関心。",context:"都市化、鉄道や写真の普及、画材の変化、美術制度への反発などが新しい制作・展示を後押ししました。",features:["写実主義：同時代の人々や社会を描く","印象派：変化する光や色、短い筆触","ポスト印象派：構成・象徴・色彩表現を個別に深める"],artists:["クールベ","マネ","モネ","ドガ","セザンヌ","ゴッホ","ゴーギャン"],works:["モネ《印象・日の出》","ドガ《踊りの花形》","セザンヌ《サント＝ヴィクトワール山》連作","ゴッホ《星月夜》"],compare:"セザンヌの構成やゴッホの個性的な色彩表現は、20世紀の前衛美術に異なる形で影響しました。"},
+{id:"modern",icon:"🧩",title:"近代美術・前衛芸術",dates:"20世紀前半",summary:"形・色・視点・素材を探究し、自然そっくりの再現から離れていく。",context:"都市化、工業化、写真や映画の発展、世界大戦などを背景に、多様な芸術運動が生まれました。",features:["フォーヴィスム：強烈で自律的な色彩","キュビスム：複数の視点と形の分解・再構成","表現主義：内面や不安の強い表現","ダダ・シュルレアリスム：既成概念や合理性への問い"],artists:["アンリ・マティス","パブロ・ピカソ","カンディンスキー","マルセル・デュシャン","サルバドール・ダリ"],works:["ピカソ《アヴィニョンの娘たち》","マティス《ダンス》","デュシャン《泉》","ダリ《記憶の固執》"],compare:"戦後美術では、絵画の形式だけでなく、アイデア、素材、展示空間、鑑賞者との関係自体が問い直されます。"},
+{id:"contemporary",icon:"🌀",title:"戦後美術・現代美術",dates:"1945年以降",summary:"抽象表現、ポップ・アート、ミニマリズム、コンセプチュアル・アートなど多様化。",context:"大量消費社会、メディア、グローバル化、政治・社会運動、技術の変化が作品の題材や形式を広げました。",features:["抽象表現主義：身振りや色面を重視","ポップ・アート：広告や大衆文化を取り込む","コンセプチュアル・アート：アイデアを中心に置く","インスタレーションや映像など媒体が多様化"],artists:["ジャクソン・ポロック","アンディ・ウォーホル","草間彌生","ヨーゼフ・ボイス","バンクシー"],works:["ウォーホル《キャンベルのスープ缶》","草間彌生《無限の鏡の間》シリーズ","ポロックのドリッピング絵画"],compare:"現代美術には単一の様式があるわけではなく、異なる時代・地域・媒体が並行して存在します。"}
+];
+const questions=[
+{q:"線遠近法の体系化と特に結びつけられる時代は？",c:["中世","ルネサンス","ロマン主義","ポップ・アート"],a:1,e:"ルネサンス期には、数学的な空間構成や自然観察が絵画に大きく取り入れられました。"},
+{q:"劇的な明暗対比や動勢が特徴として挙げられやすい様式は？",c:["バロック","新古典主義","ミニマリズム","ロマネスク"],a:0,e:"バロックでは、強い明暗、動き、感情に訴える演出が重要な特徴のひとつです。"},
+{q:"《印象・日の出》を描いた画家は？",c:["セザンヌ","モネ","ゴッホ","ダヴィッド"],a:1,e:"クロード・モネの作品名が印象派という呼称の由来のひとつになりました。"},
+{q:"キュビスムと強く結びつく画家は？",c:["ピカソ","ベルニーニ","ラファエロ","フェルメール"],a:0,e:"ピカソはジョルジュ・ブラックとともにキュビスムの形成に重要な役割を果たしました。"},
+{q:"中世ゴシック建築の特徴として適切なのは？",c:["尖頭アーチや大きな窓","完全な遠近法","ドリッピング技法","工業製品の反復"],a:0,e:"尖頭アーチ、リブ・ヴォールト、飛梁などが高い空間や大きな窓を可能にしました。"},
+{q:"古代美術とルネサンス美術に共通する重要な関心は？",c:["人体や比例への関心","写真の利用","広告の反復","映像インスタレーション"],a:0,e:"ルネサンスは古代の芸術や思想を再評価し、人体や比例、自然観察への関心を深めました。"},
+{q:"作品のアイデアや概念そのものを重視する芸術は？",c:["コンセプチュアル・アート","ロマネスク","新古典主義","印象派"],a:0,e:"コンセプチュアル・アートでは、物質的な制作物よりも概念や文脈が中心となることがあります。"},
+{q:"ロマン主義が重視したものは？",c:["感情・自然・崇高","工業規格だけ","遠近法だけ","古代の規範だけ"],a:0,e:"ロマン主義は感情、想像力、自然の力、歴史的・異国的主題などを重視しました。"}
+];
+let tab="home",currentPeriod=null,quizIndex=0,quizScore=0,selected=null,quizDone=false;
+const app=document.getElementById("app");
+const completed=()=>JSON.parse(localStorage.getItem("artHistoryDone")||"[]");
+const esc=s=>String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+function setTab(t){tab=t;document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===t));render()}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>setTab(b.dataset.tab)));
+function render(){
+ if(tab==="home")renderHome();else if(tab==="timeline")renderTimeline();else if(tab==="detail")renderDetail();else if(tab==="quiz")renderQuiz();else renderGuide();
+}
+function renderHome(){
+ let done=completed(),pct=Math.round(done.length/periods.length*100);
+ app.innerHTML=`<div class="panel"><div class="muted">YOUR LEARNING JOURNEY</div><h2>美術史の旅を続けよう</h2><p>作品の見た目だけでなく、「なぜこの表現が生まれたのか」を時代背景と一緒に読み解きます。</p><div class="progress"><span style="width:${pct}%"></span></div><b>${done.length} / ${periods.length} 時代を学習済み</b><p class="muted">${pct}% 完了</p><button class="primary" onclick="setTab('timeline')">時代一覧から学ぶ →</button></div>
+ <h2>おすすめの学び方</h2><div class="panel"><span class="tag">01 観察</span><h3>まず作品をじっくり見る</h3><p class="muted">構図、光、色、人物の視線、素材に注目。</p></div><div class="panel"><span class="tag">02 背景</span><h3>社会や思想とつなげる</h3><p class="muted">宗教・政治・技術が表現にどう関係したか考える。</p></div><div class="panel"><span class="tag">03 比較</span><h3>前後の時代と比べる</h3><p class="muted">何が受け継がれ、何が変わったのかを探す。</p></div><div class="panel"><h3>今日のミニ課題</h3><div class="artbox">「光」は、絵の中で何を伝えている？</div><p>バロック絵画を学ぶとき、光が人物や物語のどこに集まるか観察してみましょう。</p><button class="secondary" onclick="openPeriod('baroque')">バロックを学ぶ</button></div>`;
+}
+function renderTimeline(){
+ app.innerHTML=`<h2>時代の流れ</h2><p class="muted">気になる時代をタップして、背景・特徴・画家・代表作を見てみましょう。</p><div class="panel">${periods.map(p=>`<div class="period"><div class="periodIcon">${p.icon}</div><button onclick="openPeriod('${p.id}')"><div class="dates">${p.dates}</div><div class="name">${p.title} ${completed().includes(p.id)?"✓":""}</div><div class="desc">${p.summary}</div></button></div>`).join("")}</div>`;
+}
+function openPeriod(id){currentPeriod=periods.find(p=>p.id===id);tab="detail";document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab==="timeline"));render()}
+function renderDetail(){
+ const p=currentPeriod;if(!p){setTab("timeline");return}
+ const done=completed().includes(p.id);
+ app.innerHTML=`<button class="smallbtn" onclick="setTab('timeline')">← 時代一覧へ</button><div class="panel"><div class="artbox">${p.icon}　${p.title}</div><div class="tag">${p.dates}</div><h2>${p.title}</h2><p>${p.summary}</p></div>
+ <div class="panel section"><h3>▦ 時代背景</h3><p>${p.context}</p></div>
+ <div class="panel section"><h3>◉ 表現の特徴</h3><ul class="bullet">${p.features.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+ <div class="panel section"><h3>♙ 知っておきたい画家</h3><p>${p.artists.map(x=>`<span class="tag">${x}</span>`).join("")}</p></div>
+ <div class="panel section"><h3>▧ 代表作</h3><ul class="bullet">${p.works.map(x=>`<li>${x}</li>`).join("")}</ul><p class="muted">※作品画像はこのプロトタイプには含めていません。実画像を追加する際は、美術館等の画像利用条件を確認します。</p></div>
+ <div class="panel section"><h3>⇄ 前後の時代と比べる</h3><p>${p.compare}</p></div>
+ <button class="primary" onclick="toggleDone('${p.id}')">${done?"✓ 学習済み（タップで解除）":"この時代を学習済みにする"}</button>`;
+}
+function toggleDone(id){let d=completed();d=d.includes(id)?d.filter(x=>x!==id):[...d,id];localStorage.setItem("artHistoryDone",JSON.stringify(d));render()}
+function renderQuiz(){
+ if(quizDone){app.innerHTML=`<div class="panel" style="text-align:center;padding:28px 18px"><div style="font-size:52px">🏅</div><h2>クイズ終了！</h2><div style="font-size:32px;font-weight:800;color:var(--accent)">${quizScore} / ${questions.length}</div><p class="muted">間違えた問題は時代の解説を読み返してみましょう。</p><button class="primary" onclick="resetQuiz()">もう一度挑戦</button></div>`;return}
+ const q=questions[quizIndex];
+ app.innerHTML=`<div class="muted">QUESTION ${quizIndex+1} / ${questions.length}</div><div class="progress"><span style="width:${(quizIndex+1)/questions.length*100}%"></span></div><div class="panel"><h2>${q.q}</h2>${q.c.map((c,i)=>`<button class="quizChoice ${selected!==null?(i===q.a?"correct":i===selected?"wrong":""):""}" ${selected!==null?"disabled":""} onclick="answer(${i})">${c}</button>`).join("")}${selected!==null?`<div class="section"><h3>${selected===q.a?"正解！":"解説"}</h3><p>${q.e}</p><button class="primary" onclick="nextQuestion()">${quizIndex===questions.length-1?"結果を見る":"次の問題へ"}</button></div>`:""}</div><p class="muted">正解したら理由も確認して、知識をつなげよう。</p>`;
+}
+function answer(i){if(selected!==null)return;selected=i;if(i===questions[quizIndex].a)quizScore++;renderQuiz()}
+function nextQuestion(){if(quizIndex<questions.length-1){quizIndex++;selected=null}else{quizDone=true}renderQuiz()}
+function resetQuiz(){quizIndex=0;quizScore=0;selected=null;quizDone=false;renderQuiz()}
+function renderGuide(){
+ app.innerHTML=`<h2>このアプリの使い方</h2><div class="panel"><h3>1. 時代の流れをつかむ</h3><p>まず時代一覧を上から順に見て、大きな変化を把握します。時代の境界は地域によってずれるため、目安として扱いましょう。</p></div><div class="panel"><h3>2. 作品を4つの視点で見る</h3><ul class="bullet"><li><b>構図：</b>視線はどこへ誘導される？</li><li><b>光と色：</b>何を目立たせ、どんな感情を生む？</li><li><b>身体と空間：</b>人物や奥行きはどう表現される？</li><li><b>文脈：</b>誰のために、どんな場で作られた？</li></ul></div><div class="panel"><h3>3. 断定しすぎない</h3><p>美術史には作者・年代・解釈に議論がある作品もあります。代表作や様式の特徴は、研究の進展や地域差も含めて学びましょう。</p></div><div class="panel"><h3>進捗データ</h3><p class="muted">学習済みの時代は、この端末のブラウザ内に保存されます。ブラウザのデータを消去すると進捗も消える場合があります。</p><button class="secondary" onclick="if(confirm('学習済み記録をリセットしますか？')){localStorage.removeItem('artHistoryDone');renderGuide()}">学習記録をリセット</button></div><footer>西洋美術史 学習用プロトタイプ<br>画像なし・学習コンテンツはオフライン対応</footer>`;
+}
+render();
+if("serviceWorker" in navigator && location.protocol.startsWith("http")) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+</script>
+</body>
+</html>
